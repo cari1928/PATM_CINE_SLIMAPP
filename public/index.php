@@ -29,8 +29,8 @@ $app->add(new \Slim\Middleware\HttpBasicAuthentication([
 //routes
 // require "../controller/WSEmpleado.php";
 // require "../controller/WSLocal.php";
-// require "../controller/WSProveedor.php";
-// require "../controller/WSPuesto.php";
+// require "../controller/WSCategoria.php";
+require "../controller/WSFuncion.php";
 require "../controller/WSCompra.php";
 require "../controller/WSAsientosReservados.php";
 require "../controller/WSSalaAsientos.php";

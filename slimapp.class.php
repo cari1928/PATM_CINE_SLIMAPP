@@ -203,9 +203,8 @@ class SlimApp
 
 }
 
-// include 'model/empleado.php';
-// include 'model/local.php';
-// include 'model/proveedor.php';
+include 'model/colaborador.php';
+include 'model/categoria.php';
 include 'model/compra.php';
 include 'model/asientos_reservados.php';
 include 'model/sala_asientos.php';

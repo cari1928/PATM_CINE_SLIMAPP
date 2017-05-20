@@ -7,6 +7,7 @@ class Funcion extends SlimApp
 {
   private $funcion_id  = null;
   private $pelicula_id = null;
+  private $sala_id     = null;
   private $datos       = array(); //especificar array para que funcione
 
   /**
@@ -22,6 +23,11 @@ class Funcion extends SlimApp
     return $this->pelicula_id;
   }
 
+  public function getSalaId()
+  {
+    return $this->sala_id;
+  }
+
   /**
    * SETTERS
    */
@@ -35,13 +41,18 @@ class Funcion extends SlimApp
     $this->pelicula_id = $pelicula_id;
   }
 
+  public function setSalaId($pelicula_id)
+  {
+    $this->pelicula_id = $pelicula_id;
+  }
+
   public function setDatos($datos)
   {
     $this->datos = $datos;
   }
 
   /**
-   * LISTADO DE FUNCIONES
+   * FUNCIONES EN BASE A UNA PELÍCULA ID, SIN RESTRICCIÓN DE TIEMPO
    * @return array
    */
   public function getListadoF()
@@ -49,8 +60,7 @@ class Funcion extends SlimApp
     $this->conexion();
 
     $query = "SELECT * FROM funcion
-    WHERE pelicula_id=" . $this->pelicula_id .
-      " ORDER BY sala_id";
+    WHERE pelicula_id=" . $this->pelicula_id . " ORDER BY sala_id";
     $funciones = $this->fetchAll($query);
 
     for ($i = 0; $i < sizeof($funciones); $i++) {
@@ -63,18 +73,40 @@ class Funcion extends SlimApp
   }
 
   /**
-   * OBTIENE UNA FUNCION EN BASE A PELICULA_ID
+   * LISTADO DE FUNCIONES, CON LÍMITE DE TIEMPO
+   * @return [type] [description]
+   */
+  public function getListFunApp()
+  {
+    $this->conexion();
+
+    $query = "SELECT * FROM funcion
+    WHERE now() BETWEEN fecha AND fecha_fin
+    AND (hora > (now()::time)
+    OR (now()::time) < (hora_fin - ('00:30:0'::time)))";
+    $funciones = $this->fetchAll($query);
+
+    return $funciones;
+  }
+
+  /**
+   * OBTIENE UNA FUNCION EN BASE A PELICULA_ID, CON RESTRICCIÓN DE TIEMPO
    * @return array
    */
   public function getFuncion()
   {
     $this->conexion();
 
-    $query   = "SELECT * FROM funcion WHERE pelicula_id=" . $this->pelicula_id;
+    $query = "SELECT * FROM funcion
+    WHERE now()BETWEEN fecha AND fecha_fin
+    AND hora > (now()::time)
+    OR (now()::time) < (hora_fin - ('00:30:0'::time))
+    AND pelicula_id = " . $this->pelicula_id;
     $funcion = $this->fetchAll($query);
 
     if (!isset($funcion[0])) {
-      return array('notice' => array('text' => "No existe el funcion especificado"));
+      return array(
+        'notice' => array('text' => "No existe la funcion especificada"));
     }
 
     $sala = new Sala;
@@ -92,11 +124,12 @@ class Funcion extends SlimApp
   {
     $this->conexion();
 
-    $query   = "SELECT * FROM funcion WHERE funcion_id=" . $this->funcion_id;
+    $query = "SELECT * FROMfuncion
+    WHERE funcion_id = " . $this->funcion_id;
     $funcion = $this->fetchAll($query);
 
     if (!isset($funcion[0])) {
-      return array('notice' => array('text' => "No existe el funcion especificado"));
+      return array('notice' => array('text' => "Noexisteelfuncionespecificado"));
     }
 
     $sala = new Sala;

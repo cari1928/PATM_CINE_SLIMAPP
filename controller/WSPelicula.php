@@ -4,22 +4,15 @@ use \Psr\Http\Message\ResponseInterface as Response;
 use \Psr\Http\Message\ServerRequestInterface as Request;
 
 /**
- * GET ALL SALAS
+ * GET ALL PELICULAS
  * necesario para que se queden los 'use'
  */
-$app->get('/api/pelicula/listado/{idPer}/{token}',
+$app->get('/api/pelicula/listado',
   function (Request $request, Response $response) {
 
     try {
-      $bitacora = new Bitacora;
-      $bitacora->setPersonaId($request->getAttribute('idPer'));
-      $bitacora->setToken($request->getAttribute('token'));
-
-      $peliculas = array('status' => "token no valido");
-      if ($bitacora->validaToken()) {
-        $web       = new Pelicula;
-        $peliculas = $web->getListadoP();
-      }
+      $web       = new Pelicula;
+      $peliculas = $web->getListadoP();
 
       return $response
         ->withHeader('Content-Type', 'application/json')
@@ -31,22 +24,16 @@ $app->get('/api/pelicula/listado/{idPer}/{token}',
   });
 
 /**
- * GET SINGLE SUCURSAL
+ * GET SINGLE PELICULA
  */
-$app->get('/api/pelicula/ver/{idPeli}/{idPer}/{token}',
+$app->get('/api/pelicula/ver/{idPeli}',
   function (Request $request, Response $response) {
 
     try {
-      $bitacora = new Bitacora;
-      $bitacora->setPersonaId($request->getAttribute('idPer'));
-      $bitacora->setToken($request->getAttribute('token'));
-
       $pelicula = array('status' => "token no valido");
-      if ($bitacora->validaToken()) {
-        $web = new Pelicula;
-        $web->setPeliculaId($request->getAttribute('idPeli'));
-        $pelicula = $web->getPelicula();
-      }
+      $web      = new Pelicula;
+      $web->setPeliculaId($request->getAttribute('idPeli'));
+      $pelicula = $web->getPelicula();
 
       return $response->withStatus(200)
         ->withHeader('Content-Type', 'application/json')

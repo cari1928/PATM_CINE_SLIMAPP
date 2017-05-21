@@ -32,11 +32,13 @@ class Sucursal extends Slimapp
 
   /**
    * LISTADO DE SUCURSALES, CON LÍMITE DE TIEMPO
+   * Usado en especial.php
    * @return array
    */
   public function getListApp()
   {
     $this->conexion();
+
     $query = "SELECT DISTINCT sucursal.sucursal_id, pais, ciudad, direccion, latitud, longitud
     FROM sucursal
     INNER JOIN sala ON sala.sucursal_id = sucursal.sucursal_id

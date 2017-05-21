@@ -199,10 +199,12 @@ class SlimApp
   {
     echo "<pre>";
     print_r($elements);
+    die();
   }
 
 }
 
+include 'model/especial.php';
 include 'model/colaborador.php';
 include 'model/categoria.php';
 include 'model/compra.php';

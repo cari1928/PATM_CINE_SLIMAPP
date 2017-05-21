@@ -74,6 +74,7 @@ class Funcion extends SlimApp
 
   /**
    * LISTADO DE FUNCIONES, CON LÍMITE DE TIEMPO
+   * Usado en especial.php
    * @return [type] [description]
    */
   public function getListFunApp()
@@ -90,7 +91,7 @@ class Funcion extends SlimApp
   }
 
   /**
-   * OBTIENE UNA FUNCION EN BASE A PELICULA_ID, CON RESTRICCIÓN DE TIEMPO
+   * OBTIENE FUNCIONES EN BASE A PELICULA_ID, CON RESTRICCIÓN DE TIEMPO
    * @return array
    */
   public function getFuncion()
@@ -99,8 +100,8 @@ class Funcion extends SlimApp
 
     $query = "SELECT * FROM funcion
     WHERE now()BETWEEN fecha AND fecha_fin
-    AND hora > (now()::time)
-    OR (now()::time) < (hora_fin - ('00:30:0'::time))
+    AND (hora > (now()::time)
+    OR (now()::time) < (hora_fin - ('00:30:0'::time)))
     AND pelicula_id = " . $this->pelicula_id;
     $funcion = $this->fetchAll($query);
 
@@ -109,6 +110,7 @@ class Funcion extends SlimApp
         'notice' => array('text' => "No existe la funcion especificada"));
     }
 
+    //no se si esto se utiliza...
     $sala = new Sala;
     $sala->setSalaId($funcion[0]['sala_id']);
     $funcion[0]['sala'] = $sala->getSala();

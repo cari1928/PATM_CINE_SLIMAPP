@@ -32,6 +32,7 @@ class Sala extends Slimapp
 
   /**
    * LISTADO DE SALAS DENTRO DE LAS FECHAS DE LAS FUNCIONES
+   * Usado en especial.php
    * @return array
    */
   public function getListApp()
@@ -43,15 +44,7 @@ class Sala extends Slimapp
     WHERE now() BETWEEN fecha AND fecha_fin
     AND (hora > (now()::time)
     OR (now()::time) < (hora_fin - ('00:30:0'::time)))";
-    $salas = $this->fetchAll($query);
-
-    for ($i = 0; $i < sizeof($salas); $i++) {
-      $sucursal = new Sucursal;
-      $sucursal->setSucursalId($salas[$i]['sucursal_id']);
-      $salas[$i]['sucursal'] = $sucursal->getSucursal();
-    }
-
-    return $salas;
+    return $this->fetchAll($query);
   }
 
   /**

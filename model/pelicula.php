@@ -49,15 +49,15 @@ class Pelicula extends SlimApp
     for ($i = 0; $i < sizeof($peliculas); $i++) {
       $funciones = new Funcion;
       $funciones->setPeliculaId($peliculas[$i]['pelicula_id']);
-      $peliculas[$i]['funciones'] = $funciones->getListadoF();
+      $peliculas[$i]['funciones'] = $funciones->getFuncion();
 
       $categorias = new Categoria;
       $categorias->setPeliculaId($peliculas[$i]['pelicula_id']);
-      $peliculas[$i]['categorias'] = $categorias->getListadoC();
+      $peliculas[$i]['categorias'] = $categorias->getListSalaByPeli();
 
-      $colaboradores = new Colaborador;
-      $colaboradores->setPeliculaId($peliculas[$i]['pelicula_id']);
-      $peliculas[$i]['colaboradores'] = $colaboradores->getListadoC();
+      // $colaboradores = new Colaborador;
+      // $colaboradores->setPeliculaId($peliculas[$i]['pelicula_id']);
+      // $peliculas[$i]['colaboradores'] = $colaboradores->getListadoC();
     }
 
     return $peliculas;
@@ -92,6 +92,27 @@ class Pelicula extends SlimApp
     $pelicula[0]['colaborador'] = $colaborador->getListadoC();
 
     return $pelicula;
+  }
+
+  /**
+   * LISTADO DE PELICULAS CUYAS FUNCIONES ESTÁN DENTRO DE UN RANGO DE FECHA
+   * Y HORA ACTUALES
+   * Usado en especial.php
+   * @return array
+   */
+  public function getListadoPApp()
+  {
+    $this->conexion();
+
+    $query = "SELECT DISTINCT pelicula.pelicula_id, titulo, descripcion, f_lanzamiento, lenguaje, duracion, poster
+    FROM pelicula
+    INNER JOIN funcion ON funcion.pelicula_id = pelicula.pelicula_id
+    WHERE now() BETWEEN fecha AND fecha_fin AND
+    (hora > (now()::time) OR
+    (now()::time) < (hora_fin - ('00:30:0'::time)))
+    ORDER BY titulo";
+
+    return $this->fetchAll($query);
   }
 
 }

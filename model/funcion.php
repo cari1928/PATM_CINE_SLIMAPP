@@ -141,4 +141,39 @@ class Funcion extends SlimApp
     return $funcion;
   }
 
+  /**
+   * Inserción
+   * @return [type] [description]
+   */
+  public function insFuncion()
+  {
+    $this->conexion();
+    $this->setTabla('funcion');
+    $this->insert($this->datos);
+    return $this->datos;
+  }
+
+  /**
+   * Actualización
+   * @return array
+   */
+  public function updFuncion()
+  {
+    $this->conexion();
+    $this->setTabla('funcion');
+    $this->update($this->datos, array('funcion_id' => $this->datos['funcion_id']));
+    return $this->datos;
+  }
+
+  /**
+   * Borrado
+   * @return [type] [description]
+   */
+  public function delFuncion()
+  {
+    $this->conexion();
+    $this->setTabla('funcion');
+    $this->delete(array('funcion_id' => $this->funcion_id));
+  }
+
 }

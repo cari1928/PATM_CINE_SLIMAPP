@@ -1,7 +1,7 @@
 <?php
 
 /**
- *
+ * Utilizado por la app
  */
 class Especial extends SlimApp
 {

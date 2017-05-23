@@ -75,4 +75,44 @@ class SalaAsientos extends Slimapp
     return $sala_asientos;
   }
 
+  /**
+   * INSERTA UNA COMPRA
+   * @return array
+   */
+  public function insAsiento()
+  {
+    $this->conexion();
+    $this->setTabla('sala_asientos');
+    $this->insert($this->datos);
+    return $this->datos;
+  }
+
+  /**
+   * ACTUALIZA UNA COMPRA
+   * @return array
+   */
+  public function updAsiento()
+  {
+    $this->conexion();
+    $this->setTabla('sala_asientos');
+    $this->update($this->datos, array(
+      'asiento_id' => $this->datos['asiento_id']
+      'sala_id'    => $this->datos['sala_id'],
+    ));
+    return $this->datos;
+  }
+
+  /**
+   * ELIMINA UNA COMPRA
+   */
+  public function delAsiento()
+  {
+    $this->conexion();
+    $this->setTabla('sala_asientos');
+    $this->delete(array(
+      'asiento_id' => $this->datos['asiento_id']
+      'sala_id'    => $this->datos['sala_id'],
+    ));
+  }
+
 }

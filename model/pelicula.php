@@ -115,4 +115,39 @@ class Pelicula extends SlimApp
     return $this->fetchAll($query);
   }
 
+  /**
+   * Inserción
+   * @return [type] [description]
+   */
+  public function insPelicula()
+  {
+    $this->conexion();
+    $this->setTabla('pelicula');
+    $this->insert($this->datos);
+    return $this->datos;
+  }
+
+  /**
+   * Actualización
+   * @return array
+   */
+  public function updPelicula()
+  {
+    $this->conexion();
+    $this->setTabla('pelicula');
+    $this->update($this->datos, array('pelicula_id' => $this->datos['pelicula_id']));
+    return $this->datos;
+  }
+
+  /**
+   * Borrado
+   * @return [type] [description]
+   */
+  public function delPelicula()
+  {
+    $this->conexion();
+    $this->setTabla('pelicula');
+    $this->delete(array('pelicula_id' => $this->pelicula_id));
+  }
+
 }

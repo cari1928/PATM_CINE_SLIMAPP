@@ -84,4 +84,47 @@ class AsientosReservados extends SlimApp
     return $asiento;
   }
 
+  /**
+   * Inserción
+   * @return [type] [description]
+   */
+  public function insAsientos()
+  {
+    $this->conexion();
+    $this->setTabla('asientos_reservados');
+    $this->insert($this->datos);
+    return $this->datos;
+  }
+
+  /**
+   * Actualización
+   * @return array
+   */
+  public function updAsientos()
+  {
+    $this->conexion();
+    $this->setTabla('asientos_reservados');
+    $this->update($this->datos, array(
+      'cliente_id' => $this->datos['cliente_id']
+      'asiento_id' => $this->datos['asiento_id']
+      'sala_id'    => $this->datos['sala_id'],
+    ));
+    return $this->datos;
+  }
+
+  /**
+   * Borrado
+   * @return [type] [description]
+   */
+  public function delAsientos()
+  {
+    $this->conexion();
+    $this->setTabla('asientos_reservados');
+    $this->delete(array(
+      'cliente_id' => $this->datos['cliente_id']
+      'asiento_id' => $this->datos['asiento_id']
+      'sala_id'    => $this->datos['sala_id'],
+    ));
+  }
+
 }

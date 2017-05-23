@@ -103,4 +103,38 @@ class Sucursal extends Slimapp
     return $sucursal;
   }
 
+  /**
+   * INSERTA UNA COMPRA
+   * @return array
+   */
+  public function insSucursal()
+  {
+    $this->conexion();
+    $this->setTabla('sucursal');
+    $this->insert($this->datos);
+    return $this->datos;
+  }
+
+  /**
+   * ACTUALIZA UNA COMPRA
+   * @return array
+   */
+  public function updSucursal()
+  {
+    $this->conexion();
+    $this->setTabla('sucursal');
+    $this->update($this->datos, array('sucursal_id' => $this->datos['sucursal_id']));
+    return $this->datos;
+  }
+
+  /**
+   * ELIMINA UNA COMPRA
+   */
+  public function delSucursal()
+  {
+    $this->conexion();
+    $this->setTabla('sucursal');
+    $this->delete(array('sucursal_id' => $this->sucursal_id));
+  }
+
 }

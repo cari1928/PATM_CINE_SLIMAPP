@@ -115,4 +115,38 @@ class Sala extends Slimapp
     return $sala;
   }
 
+  /**
+   * INSERTA UNA COMPRA
+   * @return array
+   */
+  public function insSala()
+  {
+    $this->conexion();
+    $this->setTabla('sala');
+    $this->insert($this->datos);
+    return $this->datos;
+  }
+
+  /**
+   * ACTUALIZA UNA COMPRA
+   * @return array
+   */
+  public function updSala()
+  {
+    $this->conexion();
+    $this->setTabla('sala');
+    $this->update($this->datos, array('sala_id' => $this->datos['sala_id']));
+    return $this->datos;
+  }
+
+  /**
+   * ELIMINA UNA COMPRA
+   */
+  public function delSala()
+  {
+    $this->conexion();
+    $this->setTabla('sala');
+    $this->delete(array('sala_id' => $this->sala_id));
+  }
+
 }

@@ -96,7 +96,7 @@ class SalaAsientos extends Slimapp
     $this->conexion();
     $this->setTabla('sala_asientos');
     $this->update($this->datos, array(
-      'asiento_id' => $this->datos['asiento_id']
+      'asiento_id' => $this->datos['asiento_id'],
       'sala_id'    => $this->datos['sala_id'],
     ));
     return $this->datos;
@@ -110,7 +110,7 @@ class SalaAsientos extends Slimapp
     $this->conexion();
     $this->setTabla('sala_asientos');
     $this->delete(array(
-      'asiento_id' => $this->datos['asiento_id']
+      'asiento_id' => $this->datos['asiento_id'],
       'sala_id'    => $this->datos['sala_id'],
     ));
   }

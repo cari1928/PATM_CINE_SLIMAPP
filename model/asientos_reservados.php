@@ -105,8 +105,8 @@ class AsientosReservados extends SlimApp
     $this->conexion();
     $this->setTabla('asientos_reservados');
     $this->update($this->datos, array(
-      'cliente_id' => $this->datos['cliente_id']
-      'asiento_id' => $this->datos['asiento_id']
+      'cliente_id' => $this->datos['cliente_id'],
+      'asiento_id' => $this->datos['asiento_id'],
       'sala_id'    => $this->datos['sala_id'],
     ));
     return $this->datos;
@@ -121,8 +121,8 @@ class AsientosReservados extends SlimApp
     $this->conexion();
     $this->setTabla('asientos_reservados');
     $this->delete(array(
-      'cliente_id' => $this->datos['cliente_id']
-      'asiento_id' => $this->datos['asiento_id']
+      'cliente_id' => $this->datos['cliente_id'],
+      'asiento_id' => $this->datos['asiento_id'],
       'sala_id'    => $this->datos['sala_id'],
     ));
   }

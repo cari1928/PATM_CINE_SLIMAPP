@@ -34,7 +34,7 @@ class Pelicula extends SlimApp
    * Y HORA ACTUALES
    * @return array
    */
-  public function getListadoP()
+  public function getListadoApp()
   {
     $this->conexion();
     $query = "SELECT DISTINCT pelicula.pelicula_id, titulo, descripcion, f_lanzamiento, lenguaje, duracion, poster
@@ -54,25 +54,43 @@ class Pelicula extends SlimApp
       $categorias = new Categoria;
       $categorias->setPeliculaId($peliculas[$i]['pelicula_id']);
       $peliculas[$i]['categorias'] = $categorias->getListSalaByPeli();
-
-      // $colaboradores = new Colaborador;
-      // $colaboradores->setPeliculaId($peliculas[$i]['pelicula_id']);
-      // $peliculas[$i]['colaboradores'] = $colaboradores->getListadoC();
     }
 
     return $peliculas;
   }
 
   /**
-   * OBTIENE UNA PELÍCULA
+   * LISTADO DE PELICULAS SIN LIMITE DE TIEMPO
+   * @return array
+   */
+  public function getListado()
+  {
+    $this->conexion();
+    $query     = "SELECT * FROM pelicula ORDER BY pelicula_id DESC";
+    $peliculas = $this->fetchAll($query);
+
+    for ($i = 0; $i < sizeof($peliculas); $i++) {
+      $funciones = new Funcion;
+      $funciones->setPeliculaId($peliculas[$i]['pelicula_id']);
+      $peliculas[$i]['funciones'] = $funciones->getFuncion();
+
+      $categorias = new Categoria;
+      $categorias->setPeliculaId($peliculas[$i]['pelicula_id']);
+      $peliculas[$i]['categorias'] = $categorias->getListSalaByPeli();
+    }
+
+    return $peliculas;
+  }
+
+  /**
+   * OBTIENE UNA PELÍCULA, SIN LÍMITE DE TIEMPO
    * @return array
    */
   public function getPelicula()
   {
     $this->conexion();
 
-    $query = "SELECT * FROM pelicula
-    WHERE pelicula_id=" . $this->pelicula_id;
+    $query    = "SELECT * FROM pelicula WHERE pelicula_id=" . $this->pelicula_id;
     $pelicula = $this->fetchAll($query);
 
     if (!isset($pelicula[0])) {

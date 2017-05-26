@@ -4,14 +4,29 @@ use \Psr\Http\Message\ResponseInterface as Response;
 use \Psr\Http\Message\ServerRequestInterface as Request;
 
 /**
- * GET ALL PELICULAS
- * necesario para que se queden los 'use'
+ * GET ALL PELICULAS CON LÍMITE DE TIEMPO
  */
 $app->get('/api/pelicula/listado',
   function (Request $request, Response $response) {
     try {
       $web       = new Pelicula;
-      $peliculas = $web->getListadoP();
+      $peliculas = $web->getListadoApp();
+      return $response
+        ->withHeader('Content-Type', 'application/json')
+        ->write(json_encode($peliculas));
+    } catch (PDOException $e) {
+      echo '{"error" : {"text" : ' . $e->getMessage() . '}}';
+    }
+  });
+
+/**
+ * GET ALL PELICULAS SIN LÍMITE DE TIEMPO
+ */
+$app->get('/api/pelicula/list',
+  function (Request $request, Response $response) {
+    try {
+      $web       = new Pelicula;
+      $peliculas = $web->getListado();
       return $response
         ->withHeader('Content-Type', 'application/json')
         ->write(json_encode($peliculas));

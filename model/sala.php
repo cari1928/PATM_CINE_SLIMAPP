@@ -55,6 +55,7 @@ class Sala extends Slimapp
   {
     $this->conexion();
     $query = "SELECT * FROM sala ORDER BY sala_id";
+    $salas = $this->fetchAll($query);
 
     for ($i = 0; $i < sizeof($salas); $i++) {
       $sucursal = new Sucursal;

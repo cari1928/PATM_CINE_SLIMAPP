@@ -152,8 +152,6 @@ $app->put('/api/sala/update/{idPer}/{token}',
         $datos = array(
           'sala_id'     => $request->getParam('sala_id'),
           'nombre'      => $request->getParam('nombre'),
-          'num_filas'   => $request->getParam('num_filas'),
-          'num_cols'    => $request->getParam('num_cols'),
           'sucursal_id' => $request->getParam('sucursal_id'),
           'numero_sala' => $request->getParam('numero_sala'),
         );

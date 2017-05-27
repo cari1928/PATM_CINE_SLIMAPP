@@ -2,19 +2,10 @@
 
 require 'slimapp.class.php';
 
-$web->conexion();
+$web = new SalaAsientos;
+$web->setFuncionId(2);
+$web->setSucursalId(1);
+$web->setSalaId(2);
+$asientos = $web->getDesocupados();
 
-$datos = array(
-  'cliente_id'  => 27,
-  'funcion_id'  => 6,
-  'empleado_id' => 8,
-  'total'       => 60,
-  'entradas'    => 1,
-  'tipo_pago'   => "Tarjeta",
-);
-
-$web = new Compra;
-$web->setDatos($datos);
-$compra = $web->insCompra();
-
-$web->debug($compra);
+$web->debug($asientos);

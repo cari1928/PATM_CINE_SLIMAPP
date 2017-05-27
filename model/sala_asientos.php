@@ -9,6 +9,7 @@ class SalaAsientos extends Slimapp
   private $sala_id     = null;
   private $asiento_id  = null;
   private $sucursal_id = null;
+  private $funcion_id  = null;
   private $datos       = array();
 
   /**
@@ -25,6 +26,11 @@ class SalaAsientos extends Slimapp
   }
 
   public function getSucursalId()
+  {
+    return $this->sucursal_id;
+  }
+
+  public function getFuncionId()
   {
     return $this->sucursal_id;
   }
@@ -47,6 +53,11 @@ class SalaAsientos extends Slimapp
     $this->sucursal_id = $sucursal_id;
   }
 
+  public function setFuncionId($funcion_id)
+  {
+    $this->funcion_id = $funcion_id;
+  }
+
   public function setDatos($datos)
   {
     $this->datos = $datos;
@@ -59,26 +70,30 @@ class SalaAsientos extends Slimapp
   public function getDesocupados()
   {
     $this->conexion();
-    $query = "SELECT sa.sala_id, sa.asiento_id, sa.fila, sa.columna, ar.cliente_id
+
+    $query = "SELECT sa.asiento_id, sa.columna, sa.fila, ar.cliente_id
     FROM sala_asientos sa
     LEFT JOIN asientos_reservados ar ON ar.sala_id = sa.sala_id
     AND ar.asiento_id = sa.asiento_id
-    WHERE sa.sala_id=" . $this->sala_id . "
-     AND sa.sala_id IN (
-    SELECT sala_id FROM sala WHERE sucursal_id=" . $this->sucursal_id . ")";
+    WHERE sa.sala_id IN (
+    SELECT sala_id FROM sala WHERE sucursal_id=" . $this->sucursal_id . ")
+    AND sa.sala_id = " . $this->sala_id . "
+    AND sa.funcion_id = " . $this->funcion_id;
     $asientos = $this->fetchAll($query);
-    $libres   = array();
+
+    $libres = array();
     for ($i = 0; $i < sizeof($asientos); $i++) {
       if (empty($asientos[$i]['cliente_id'])) {
         unset($asientos[$i]['cliente_id']);
 
         $sala = new Sala;
-        $sala->setSalaId($asientos[$i]['sala_id']);
+        $sala->setSalaId($this->sala_id);
         $asientos[$i]['sala'] = $sala->getSala();
 
         array_push($libres, $asientos[$i]);
       }
     }
+
     return $libres;
   }
 
@@ -90,21 +105,21 @@ class SalaAsientos extends Slimapp
   {
     $this->conexion();
 
-    $query = "SELECT * FROM sala_asientos
-    WHERE sala_id=" . $this->sala_id . "
-    AND asiento_id=" . $this->asiento_id;
+    $query = "SELECT * FROMsala_asientos
+    WHEREsala_id   = " . $this->sala_id . "
+    and asiento_id = " . $this->asiento_id;
     $sala_asientos = $this->fetchAll($query);
 
     if (!isset($sala_asientos[0])) {
       return array(
-        'notice' => array('text' => "No existe el asiento-sala especificado"));
+        'notice' => array('text' => "Noexisteelasiento - salaespecificado"));
     }
 
     return $sala_asientos;
   }
 
   /**
-   * INSERTA UNA COMPRA
+   * INSERTA
    * @return array
    */
   public function insAsiento()
@@ -116,7 +131,7 @@ class SalaAsientos extends Slimapp
   }
 
   /**
-   * ACTUALIZA UNA COMPRA
+   * ACTUALIZA
    * @return array
    */
   public function updAsiento()
@@ -131,7 +146,7 @@ class SalaAsientos extends Slimapp
   }
 
   /**
-   * ELIMINA UNA COMPRA
+   * ELIMINA
    */
   public function delAsiento()
   {

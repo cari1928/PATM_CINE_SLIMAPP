@@ -1,8 +1,5 @@
 <?php
 
-/**
- *
- */
 class AsientosReservados extends SlimApp
 {
   private $cliente_id = null;

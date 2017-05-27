@@ -52,6 +52,27 @@ class Funcion extends SlimApp
   }
 
   /**
+   * TODO EL LISTADO
+   * @return array
+   */
+  public function getListado()
+  {
+    $this->conexion();
+    $query     = "SELECT * FROM funcion ORDER BY funcion_id DESC";
+    $funciones = $this->fetchAll($query);
+    for ($i = 0; $i < sizeof($funciones); $i++) {
+      $sala = new Sala;
+      $sala->setSalaId($funciones[$i]['sala_id']);
+      $funciones[$i]['sala'] = $sala->getSala(); //ya incluye la sucursal
+
+      $pelicula = new Pelicula();
+      $pelicula->setPeliculaId($funciones[$i]['pelicula_id']);
+      $funciones[$i]['pelicula'] = $pelicula->getSimplePelicula();
+    }
+    return $funciones;
+  }
+
+  /**
    * FUNCIONES EN BASE A UNA PELÍCULA ID, SIN RESTRICCIÓN DE TIEMPO
    * @return array
    */
@@ -125,9 +146,7 @@ class Funcion extends SlimApp
   public function getFuncionById()
   {
     $this->conexion();
-
-    $query = "SELECT * FROMfuncion
-    WHERE funcion_id = " . $this->funcion_id;
+    $query   = "SELECT * FROM funcion WHERE funcion_id = " . $this->funcion_id;
     $funcion = $this->fetchAll($query);
 
     if (!isset($funcion[0])) {
@@ -137,6 +156,10 @@ class Funcion extends SlimApp
     $sala = new Sala;
     $sala->setSalaId($funcion[0]['sala_id']);
     $funcion[0]['sala'] = $sala->getSala();
+
+    $pelicula = new Pelicula;
+    $pelicula->setPeliculaId($funcion[0]['pelicula_id']);
+    $funcion[0]['pelicula'] = $pelicula->getSimplePelicula();
 
     return $funcion;
   }

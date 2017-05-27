@@ -1,15 +1,16 @@
 <?php
 
 require 'slimapp.class.php';
-$web   = new Sala;
-$datos = array(
-  'sala_id'   => 1,
-  'pais'      => $request->getParam('pais'),
-  'ciudad'    => $request->getParam('ciudad'),
-  'direccion' => $request->getParam('direccion'),
-  'latitud'   => $request->getParam('latitud'),
-  'longitud'  => $request->getParam('longitud'),
-);
-$web->setDatos($datos);
-$sala = $web->updSala();
-$web->debug($sala);
+$web = new Funcion;
+$web->setFuncionId(1);
+$funcion = $web->getFuncionById();
+
+$web = new Pelicula;
+$web->setPeliculaId($funcion[0]['pelicula_id']);
+$funcion['pelicula'] = $web->getSimplePelicula();
+
+$web = new Sala;
+$web->setSalaId($funcion[0]['sala_id']);
+$funcion['sala'] = $web->getSala();
+
+$web->debug($funcion);

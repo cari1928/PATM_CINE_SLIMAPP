@@ -84,6 +84,7 @@ class Pelicula extends SlimApp
 
   /**
    * OBTIENE UNA PELÍCULA, SIN LÍMITE DE TIEMPO
+   * EN BASE A UNA PELÍCULA
    * @return array
    */
   public function getPelicula()
@@ -109,6 +110,22 @@ class Pelicula extends SlimApp
     $colaborador->setPeliculaId($pelicula[0]['pelicula_id']);
     $pelicula[0]['colaborador'] = $colaborador->getListadoC();
 
+    return $pelicula;
+  }
+
+  /**
+   * OBTIENE UNA PELÍCULA, SIN LÍMITE DE TIEMPO
+   * EN BASE A UNA PELÍCULA, DE FORMA SIMPLE
+   * @return array
+   */
+  public function getSimplePelicula()
+  {
+    $this->conexion();
+    $query    = "SELECT * FROM pelicula WHERE pelicula_id=" . $this->pelicula_id;
+    $pelicula = $this->fetchAll($query);
+    if (!isset($pelicula[0])) {
+      return array('notice' => array('text' => "No existe la pelicula especificado"));
+    }
     return $pelicula;
   }
 

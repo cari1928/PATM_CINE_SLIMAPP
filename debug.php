@@ -1,16 +1,20 @@
 <?php
 
 require 'slimapp.class.php';
-$web = new Funcion;
-$web->setFuncionId(1);
-$funcion = $web->getFuncionById();
 
-$web = new Pelicula;
-$web->setPeliculaId($funcion[0]['pelicula_id']);
-$funcion['pelicula'] = $web->getSimplePelicula();
+$web->conexion();
 
-$web = new Sala;
-$web->setSalaId($funcion[0]['sala_id']);
-$funcion['sala'] = $web->getSala();
+$datos = array(
+  'cliente_id'  => 27,
+  'funcion_id'  => 6,
+  'empleado_id' => 8,
+  'total'       => 60,
+  'entradas'    => 1,
+  'tipo_pago'   => "Tarjeta",
+);
 
-$web->debug($funcion);
+$web = new Compra;
+$web->setDatos($datos);
+$compra = $web->insCompra();
+
+$web->debug($compra);

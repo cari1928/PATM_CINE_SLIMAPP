@@ -102,7 +102,6 @@ $app->post('/api/compra/add/{idPer}/{token}',
         $datos = array(
           'cliente_id'  => $request->getParam('cliente_id'),
           'funcion_id'  => $request->getParam('funcion_id'),
-          'fecha'       => $request->getParam('fecha'),
           'empleado_id' => $request->getParam('empleado_id'),
           'total'       => $request->getParam('total'),
           'entradas'    => $request->getParam('entradas'),

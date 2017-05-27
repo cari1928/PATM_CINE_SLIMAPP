@@ -5,7 +5,6 @@ use \Psr\Http\Message\ServerRequestInterface as Request;
 
 /**
  * GET ALL SALA-ASIENTOS
- * necesario para que se queden los 'use'
  */
 $app->get('/api/sala_asientos/listado/{idSala}/{idPer}/{token}',
   function (Request $request, Response $response) {
@@ -26,6 +25,31 @@ $app->get('/api/sala_asientos/listado/{idSala}/{idPer}/{token}',
         ->withHeader('Content-Type', 'application/json')
         ->write(json_encode($asientos));
 
+    } catch (PDOException $e) {
+      echo '{"error" : {"text" : ' . $e->getMessage() . '}}';
+    }
+  });
+
+/**
+ * GET ALL SALA-ASIENTOS
+ * usado por la página web
+ */
+$app->get('/api/sala_asientos/disponibles/{idSuc}/{idSala}/{idPer}/{token}',
+  function (Request $request, Response $response) {
+    try {
+      $bitacora = new Bitacora;
+      $bitacora->setPersonaId($request->getAttribute('idPer'));
+      $bitacora->setToken($request->getAttribute('token'));
+      $asientos = array('status' => "token no valido");
+      if ($bitacora->validaToken()) {
+        $web = new SalaAsientos;
+        $web->setSucursalId($request->getAttribute('idSuc'));
+        $web->setSalaId($request->getAttribute('idSala'));
+        $asientos = $web->getDesocupados();
+      }
+      return $response
+        ->withHeader('Content-Type', 'application/json')
+        ->write(json_encode($asientos));
     } catch (PDOException $e) {
       echo '{"error" : {"text" : ' . $e->getMessage() . '}}';
     }

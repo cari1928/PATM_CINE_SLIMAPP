@@ -6,9 +6,10 @@
 class SalaAsientos extends Slimapp
 {
 
-  private $sala_id    = null;
-  private $asiento_id = null;
-  private $datos      = array();
+  private $sala_id     = null;
+  private $asiento_id  = null;
+  private $sucursal_id = null;
+  private $datos       = array();
 
   /**
    * GETTERS
@@ -21,6 +22,11 @@ class SalaAsientos extends Slimapp
   public function getAsientoId()
   {
     return $this->asiento_id;
+  }
+
+  public function getSucursalId()
+  {
+    return $this->sucursal_id;
   }
 
   /**
@@ -36,6 +42,11 @@ class SalaAsientos extends Slimapp
     $this->asiento_id = $asiento_id;
   }
 
+  public function setSucursalId($sucursal_id)
+  {
+    $this->sucursal_id = $sucursal_id;
+  }
+
   public function setDatos($datos)
   {
     $this->datos = $datos;
@@ -45,13 +56,30 @@ class SalaAsientos extends Slimapp
    * LISTADO DE SALA-ASIENTOS DESOCUPADOS
    * @return array
    */
-  public function getListadoSA()
+  public function getDesocupados()
   {
     $this->conexion();
-    $query = "SELECT * FROM sala_asientos
-    WHERE sala_id=" . $this->sala_id .
-      " AND estado=0"; //se obtienen los asientos desocupados
-    return $this->fetchAll($query);
+    $query = "SELECT sa.sala_id, sa.asiento_id, sa.fila, sa.columna, ar.cliente_id
+    FROM sala_asientos sa
+    LEFT JOIN asientos_reservados ar ON ar.sala_id = sa.sala_id
+    AND ar.asiento_id = sa.asiento_id
+    WHERE sa.sala_id=" . $this->sala_id . "
+     AND sa.sala_id IN (
+    SELECT sala_id FROM sala WHERE sucursal_id=" . $this->sucursal_id . ")";
+    $asientos = $this->fetchAll($query);
+    $libres   = array();
+    for ($i = 0; $i < sizeof($asientos); $i++) {
+      if (empty($asientos[$i]['cliente_id'])) {
+        unset($asientos[$i]['cliente_id']);
+
+        $sala = new Sala;
+        $sala->setSalaId($asientos[$i]['sala_id']);
+        $asientos[$i]['sala'] = $sala->getSala();
+
+        array_push($libres, $asientos[$i]);
+      }
+    }
+    return $libres;
   }
 
   /**

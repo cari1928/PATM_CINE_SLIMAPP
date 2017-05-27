@@ -45,6 +45,32 @@ $app->get('/api/funcion/listado',
   });
 
 /**
+ * GET ALL FUNCIONES EN BASE A UNA SUCURSAL
+ * CON RESTRICCIÓN DE TIEMPO
+ */
+$app->get('/api/funcion/listSuc/{idSuc}/{idPer}/{token}',
+  function (Request $request, Response $response) {
+    try {
+      $bitacora = new Bitacora;
+      $bitacora->setPersonaId($request->getAttribute('idPer'));
+      $bitacora->setToken($request->getAttribute('token'));
+
+      $funcion = array('status' => "No se pudo insertar");
+      if ($bitacora->validaToken()) {
+        $funciones = array('status' => "token no valido");
+        $web       = new Funcion;
+        $web->setSucursalId($request->getAttribute('idSuc'));
+        $funciones = $web->getListadoFunSuc();
+      }
+      return $response
+        ->withHeader('Content-Type', 'application/json')
+        ->write(json_encode($funciones));
+    } catch (PDOException $e) {
+      echo '{"error" : {"text" : ' . $e->getMessage() . '}}';
+    }
+  });
+
+/**
  * GET SINGLE FUNCION, CON LÍMITE DE TIEMPO
  */
 $app->get('/api/funcion/ver/app/{idFun}',

@@ -7,6 +7,7 @@ class Funcion extends SlimApp
 {
   private $funcion_id  = null;
   private $pelicula_id = null;
+  private $sucursal_id = null;
   private $sala_id     = null;
   private $datos       = array(); //especificar array para que funcione
 
@@ -28,6 +29,11 @@ class Funcion extends SlimApp
     return $this->sala_id;
   }
 
+  public function getSucursalId()
+  {
+    return $this->sucursal_id;
+  }
+
   /**
    * SETTERS
    */
@@ -44,6 +50,11 @@ class Funcion extends SlimApp
   public function setSalaId($pelicula_id)
   {
     $this->pelicula_id = $pelicula_id;
+  }
+
+  public function setSucursalId($sucursal_id)
+  {
+    $this->sucursal_id = $sucursal_id;
   }
 
   public function setDatos($datos)
@@ -88,6 +99,36 @@ class Funcion extends SlimApp
       $sala = new Sala;
       $sala->setSalaId($funciones[$i]['sala_id']);
       $funciones[$i]['sala'] = $sala->getSala(); //ya incluye la sucursal
+    }
+
+    return $funciones;
+  }
+
+  /**
+   * FUNCIONES EN BASE A UNA SUCURSAL ID, CON RESTRICCIÓN DE TIEMPO
+   * @return array
+   */
+  public function getListadoFunSuc()
+  {
+    $this->conexion();
+    $query = "SELECT DISTINCT funcion_id, pelicula_id, s.sala_id, fecha, hora, fecha_fin, hora_fin
+    FROM funcion f
+    INNER JOIN sala s ON f.sala_id = s.sala_id
+    INNER JOIN sucursal suc ON suc.sucursal_id = s.sucursal_id
+    WHERE now() BETWEEN fecha AND fecha_fin
+        -- AND (hora > (now()::time)
+        OR (now()::time) < (hora_fin - ('00:30:0'::time))
+        AND suc.sucursal_id=" . $this->sucursal_id;
+    $funciones = $this->fetchAll($query);
+
+    for ($i = 0; $i < sizeof($funciones); $i++) {
+      $sala = new Sala;
+      $sala->setSalaId($funciones[$i]['sala_id']);
+      $funciones[$i]['sala'] = $sala->getSala(); //ya incluye la sucursal
+
+      $pelicula = new Pelicula();
+      $pelicula->setPeliculaId($funciones[$i]['pelicula_id']);
+      $funciones[$i]['pelicula'] = $pelicula->getSimplePelicula();
     }
 
     return $funciones;

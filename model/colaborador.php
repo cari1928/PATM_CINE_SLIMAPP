@@ -61,7 +61,8 @@ class Colaborador extends Slimapp
   public function getListadoCApp()
   {
     $this->conexion();
-    $query = "SELECT DISTINCT c.colaborador_id, c.nombre, c.apellidos FROM funcion f
+    $query = "SELECT DISTINCT c.colaborador_id, c.nombre, c.apellidos
+    FROM funcion f
     INNER JOIN pelicula p ON p.pelicula_id = f.pelicula_id
     INNER JOIN reparto r ON r.pelicula_id = p.pelicula_id
     INNER JOIN colaborador c ON c.colaborador_id = r.colaborador_id

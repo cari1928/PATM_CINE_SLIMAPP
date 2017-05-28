@@ -5,6 +5,7 @@ use \Psr\Http\Message\ServerRequestInterface as Request;
 
 /**
  * GET ALL SALA-ASIENTOS
+ * MEDIANTE SALA_ID
  */
 $app->get('/api/sala_asientos/listado/{idSala}/{idPer}/{token}',
   function (Request $request, Response $response) {
@@ -32,6 +33,7 @@ $app->get('/api/sala_asientos/listado/{idSala}/{idPer}/{token}',
 
 /**
  * GET ALL SALA-ASIENTOS
+ * MEDIANTE FUNCION ID, SUCURSAL ID, SALA ID
  * usado por la página web
  */
 $app->get('/api/sala_asientos/disponibles/{idFun}/{idSuc}/{idSala}/{idPer}/{token}',
@@ -57,7 +59,35 @@ $app->get('/api/sala_asientos/disponibles/{idFun}/{idSuc}/{idSala}/{idPer}/{toke
   });
 
 /**
+ * GET ALL SALA-ASIENTOS
+ * MEDIANTE FUNCION ID, SUCURSAL ID, SALA ID
+ * usado por la página web
+ */
+$app->get('/api/sala_asientos/disponiblesApp/{idFun}/{idSuc}/{idSala}/{idPer}/{token}',
+  function (Request $request, Response $response) {
+    try {
+      $bitacora = new Bitacora;
+      $bitacora->setPersonaId($request->getAttribute('idPer'));
+      $bitacora->setToken($request->getAttribute('token'));
+      $asientos = array('status' => "token no valido");
+      if ($bitacora->validaToken()) {
+        $web = new SalaAsientos;
+        $web->setFuncionId($request->getAttribute('idFun'));
+        $web->setSucursalId($request->getAttribute('idSuc'));
+        $web->setSalaId($request->getAttribute('idSala'));
+        $asientos = $web->getDesocupadosApp();
+      }
+      return $response
+        ->withHeader('Content-Type', 'application/json')
+        ->write(json_encode($asientos));
+    } catch (PDOException $e) {
+      echo '{"error" : {"text" : ' . $e->getMessage() . '}}';
+    }
+  });
+
+/**
  * GET SINGLE SALA-ASIENTO
+ * MEDIANTE SALA ID Y ASIENTO ID
  */
 $app->get('/api/sala_asientos/ver/{idSala}/{idAsi}/{idPer}/{token}',
   function (Request $request, Response $response) {

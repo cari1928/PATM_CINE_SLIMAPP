@@ -98,6 +98,35 @@ class SalaAsientos extends Slimapp
   }
 
   /**
+   * LISTADO DE SALA-ASIENTOS DESOCUPADOS
+   * @return array
+   */
+  public function getDesocupadosApp()
+  {
+    $this->conexion();
+
+    $query = "SELECT sa.asiento_id, sa.columna, sa.fila, ar.cliente_id
+    FROM sala_asientos sa
+    LEFT JOIN asientos_reservados ar ON ar.sala_id = sa.sala_id
+    AND ar.asiento_id = sa.asiento_id
+    WHERE sa.sala_id IN (
+    SELECT sala_id FROM sala WHERE sucursal_id=" . $this->sucursal_id . ")
+    AND sa.sala_id = " . $this->sala_id . "
+    AND sa.funcion_id = " . $this->funcion_id;
+    $asientos = $this->fetchAll($query);
+
+    $libres = array();
+    for ($i = 0; $i < sizeof($asientos); $i++) {
+      if (empty($asientos[$i]['cliente_id'])) {
+        unset($asientos[$i]['cliente_id']);
+        array_push($libres, $asientos[$i]);
+      }
+    }
+
+    return $libres;
+  }
+
+  /**
    * OBTIENE UN ASIENTO DE UNA SALA EN ESPECÍFICO
    * @return array
    */

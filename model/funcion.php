@@ -117,7 +117,7 @@ class Funcion extends SlimApp
     INNER JOIN sucursal suc ON suc.sucursal_id = s.sucursal_id
     WHERE (now() BETWEEN fecha AND fecha_fin
         -- AND (hora > (now()::time)
-        OR (now()::time) < (hora_fin - ('00:30:0'::time)))
+        AND (now()::time) < (hora_fin - ('00:30:0'::time)))
         AND suc.sucursal_id=" . $this->sucursal_id;
     $funciones = $this->fetchAll($query);
 
